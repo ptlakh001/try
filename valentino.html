@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine Confession ❤️</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle at top, #0b0b12, #000000 70%);
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+        cursor: crosshair;
+        transition: background 2s ease;
+    }
+
+    body.love-bg {
+        background: radial-gradient(circle at center, #2b0000, #000000);
+    }
+
+    .star {
+        position: fixed;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+        from { opacity: 0.2; }
+        to { opacity: 1; }
+    }
+
+    .card {
+        text-align: center;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        padding: 50px 70px;
+        border-radius: 30px;
+        box-shadow: 0 0 40px rgba(120, 0, 0, 0.4);
+        position: relative;
+        z-index: 2;
+        width: 460px;
+    }
+
+    h1 {
+        font-weight: 300;
+        font-size: 2.2rem;
+        margin-bottom: 35px;
+        letter-spacing: 1px;
+    }
+
+    .buttons {
+        position: relative;
+        height: 200px;
+    }
+
+    button {
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        font-weight: bold;
+    }
+
+    #yesBtn {
+        width: 120px;
+        height: 110px;
+        background: #8b0000;
+        color: white;
+        left: 160px;
+        top: 70px;
+        transform: rotate(-45deg) scale(1);
+        transition: transform 0.4s ease;
+        box-shadow: 0 0 25px rgba(139, 0, 0, 0.8);
+    }
+
+    #yesBtn::before,
+    #yesBtn::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 110px;
+        background: #8b0000;
+        border-radius: 50%;
+    }
+
+    #yesBtn::before { top: -60px; left: 0; }
+    #yesBtn::after { left: 60px; top: 0; }
+
+    #yesBtn span {
+        position: absolute;
+        transform: rotate(45deg);
+        width: 100%;
+        text-align: center;
+        top: 35px;
+        left: 0;
+        font-size: 18px;
+    }
+
+    #noBtn {
+        background: rgba(255,255,255,0.15);
+        color: white;
+        padding: 12px 22px;
+        border-radius: 12px;
+        left: 30px;
+        top: 20px;
+        z-index: 3;
+        transition: left 0.4s ease, top 0.4s ease;
+    }
+
+    .message {
+        margin-top: 30px;
+        font-size: 1.5rem;
+        display: none;
+        animation: fadeIn 2s ease forwards;
+        color: #ffb3b3;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    .heart {
+        position: fixed;
+        bottom: -20px;
+        font-size: 22px;
+        color: #8b0000;
+        animation: floatUp linear forwards;
+        z-index: 1;
+        opacity: 0.85;
+    }
+
+    @keyframes floatUp {
+        to { transform: translateY(-110vh); opacity: 0; }
+    }
+
+    .sparkle {
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: fadeOut 1s forwards;
+        z-index: 3;
+    }
+
+    @keyframes fadeOut {
+        to { transform: scale(2); opacity: 0; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1 id="questionText">Will you be Valentine Bhebhi?</h1>
+    <div class="buttons" id="buttonArea">
+        <button id="yesBtn"><span>YES ❤️</span></button>
+        <button id="noBtn">no…</button>
+    </div>
+   <div class="message" id="loveMsg">
+        it’s always been you 🌙 <br><br>
+        Thato Work <br><br>
+        Then let the stars witness the beginning of our forever ✨❤️
+    </div>
+</div>
+
+<audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/10/25/audio_946b6f6d84.mp3" loop></audio>
+
+<script>
+const area = document.getElementById("buttonArea");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const loveMsg = document.getElementById("loveMsg");
+const bgMusic = document.getElementById("bgMusic");
+const questionText = document.getElementById("questionText");
+
+let yesScale = 1;
+
+// Stars
+for (let i = 0; i < 120; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDuration = (1 + Math.random() * 2) + "s";
+    document.body.appendChild(star);
+}
+
+// Floating dark hearts
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random()*3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
+}, 400);
+
+// Shy NO + gentle YES growth
+area.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const distance = Math.hypot(
+        e.clientX - (rect.left + rect.width/2),
+        e.clientY - (rect.top + rect.height/2)
+    );
+
+    if (distance < 120) {
+        const maxX = area.clientWidth - rect.width;
+        const maxY = area.clientHeight - rect.height;
+
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
+
+        yesScale += 0.025;
+        yesBtn.style.transform = `rotate(-45deg) scale(${yesScale})`;
+    }
+});
+
+// Sparkle trail
+document.addEventListener("mousemove", (e) => {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = e.clientX + "px";
+    s.style.top = e.clientY + "px";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+});
+
+// YES click moment
+yesBtn.addEventListener("click", () => {
+    document.body.classList.add("love-bg");
+    loveMsg.style.display = "block";
+    questionText.style.display = "none"; // hide the question
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    bgMusic.play();
+});
+</script>
+
+</body>
+</html>
