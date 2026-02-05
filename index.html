@@ -30,14 +30,8 @@
         height: 2px;
         background: white;
         border-radius: 50%;
-        opacity: 0.8;
+        opacity: 0.9;
         animation: twinkle 2s infinite alternate;
-    }
-
-    /* 🌟 Brighter stars */
-    .bright-star {
-        box-shadow: 0 0 12px 4px rgba(255,255,255,0.9);
-        opacity: 1 !important;
     }
 
     @keyframes twinkle {
@@ -119,7 +113,7 @@
         left: 30px;
         top: 20px;
         z-index: 3;
-        transition: left 0.4s ease, top 0.4s ease;
+        transition: left 0.05s linear, top 0.05s linear, transform 0.05s linear;
     }
 
     .message {
@@ -164,43 +158,54 @@
         to { transform: scale(2); opacity: 0; }
     }
 
-    /* 💬 Star message */
-    .star-message {
+    .quote {
         position: fixed;
-        color: white;
         font-size: 16px;
-        max-width: 240px;
-        text-align: center;
-        line-height: 1.4;
-        text-shadow: 0 0 12px rgba(255,255,255,0.9);
-        animation: starMsgFade 6s forwards;
+        color: #ffb3b3;
+        font-weight: 500;
+        opacity: 0;
+        animation: floatQuote 2s forwards;
+        z-index: 4;
         pointer-events: none;
-        z-index: 5;
     }
 
-    @keyframes starMsgFade {
-        0% { opacity: 0; transform: translateY(10px); }
-        10% { opacity: 1; transform: translateY(0); }
-        80% { opacity: 1; }
-        100% { opacity: 0; transform: translateY(-10px); }
+    @keyframes floatQuote {
+        0% { opacity: 1; transform: translateY(0px) scale(1); }
+        100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
     }
 
-    /* ☄️ Shooting star */
-    .shooting-star {
+    .smoke {
         position: fixed;
-        width: 2px;
-        height: 80px;
-        background: linear-gradient(-45deg, white, rgba(255,255,255,0));
-        opacity: 0.9;
-        transform: rotate(45deg);
-        animation: shoot 1s linear forwards;
-        z-index: 0;
+        width: 10px;
+        height: 10px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: smokeRise 1s forwards;
+        z-index: 4;
     }
 
-    @keyframes shoot {
-        from { transform: translate(0,0) rotate(45deg); opacity: 1; }
-        to { transform: translate(500px,500px) rotate(45deg); opacity: 0; }
+    @keyframes smokeRise {
+        0% { transform: translate(0,0) scale(0.5); opacity: 0.6; }
+        100% { transform: translate(-20px,-50px) scale(1.2); opacity: 0; }
     }
+
+    .scream {
+        position: fixed;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        opacity: 1;
+        animation: floatScream 1s forwards;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    @keyframes floatScream {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+    }
+
 </style>
 </head>
 
@@ -238,75 +243,8 @@ for (let i = 0; i < 120; i++) {
     star.style.left = Math.random() * 100 + "vw";
     star.style.top = Math.random() * 100 + "vh";
     star.style.animationDuration = (1 + Math.random() * 2) + "s";
-    if (Math.random() > 0.75) star.classList.add("bright-star");
     document.body.appendChild(star);
 }
-
-// 💬 Romantic quotes
-const starQuotes = [
-    "Of all the paths in life… mine led to you ✨",
-    "My heart feels at home when it's with you 💖",
-    "You are my favorite thought before I sleep 🌙",
-    "If love had a face, it would look like you",
-    "Every star tonight reminds me of your light ⭐",
-    "Loving you feels like destiny, not chance",
-    "You are my calm in every storm",
-    "The universe was kind when it gave me you",
-    "My heart chose you before I even knew why",
-    "Forever doesn’t feel long enough with you ❤️"
-];
-let activeStarMsg = null; // keeps track of current visible quote
-
-function showStarMessage(x, y) {
-    // Remove any existing message first
-    if (activeStarMsg) {
-        activeStarMsg.remove();
-        activeStarMsg = null;
-    }
-
-    const msg = document.createElement("div");
-    msg.className = "star-message";
-    msg.innerHTML = starQuotes[Math.floor(Math.random() * starQuotes.length)];
-    msg.style.left = (x - 120) + "px";
-    msg.style.top = (y - 40) + "px";
-
-    document.body.appendChild(msg);
-    activeStarMsg = msg;
-
-    setTimeout(() => {
-        if (msg === activeStarMsg) {
-            msg.remove();
-            activeStarMsg = null;
-        }
-    }, 6000);
-}
-
-
-function checkStarTap(x, y) {
-    document.querySelectorAll('.star').forEach(star => {
-        const rect = star.getBoundingClientRect();
-        const sx = rect.left + rect.width / 2;
-        const sy = rect.top + rect.height / 2;
-        if (Math.hypot(sx - x, sy - y) < 25) showStarMessage(sx, sy);
-    });
-}
-
-document.addEventListener("click", e => checkStarTap(e.clientX, e.clientY));
-document.addEventListener("touchstart", e => {
-    const t = e.touches[0];
-    checkStarTap(t.clientX, t.clientY);
-});
-
-// ☄️ Shooting stars
-function createShootingStar() {
-    const s = document.createElement("div");
-    s.className = "shooting-star";
-    s.style.left = Math.random() * window.innerWidth * 0.6 + "px";
-    s.style.top = Math.random() * window.innerHeight * 0.3 + "px";
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 1000);
-}
-setInterval(() => { if (Math.random() > 0.6) createShootingStar(); }, 2500);
 
 // ❤️ Floating hearts
 setInterval(() => {
@@ -319,17 +257,66 @@ setInterval(() => {
     setTimeout(() => heart.remove(), 7000);
 }, 400);
 
-// 🙈 Shy NO + growing YES
+// 🙈 Shy NO + gentle YES growth
 area.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(e.clientX - (rect.left + rect.width/2), e.clientY - (rect.top + rect.height/2));
-    if (distance < 120) {
+    const distance = Math.hypot(
+        e.clientX - (rect.left + rect.width/2),
+        e.clientY - (rect.top + rect.height/2)
+    );
+
+    if (distance < 160) { // react sooner
         const maxX = area.clientWidth - rect.width;
         const maxY = area.clientHeight - rect.height;
+
+        // 🔥 Shake animation
+        noBtn.style.transform = `rotate(${Math.random()*40-20}deg) scale(${1 + Math.random()*0.2})`;
+
         noBtn.style.left = Math.random() * maxX + "px";
         noBtn.style.top = Math.random() * maxY + "px";
+
         yesScale += 0.025;
         yesBtn.style.transform = `rotate(-45deg) scale(${yesScale})`;
+
+        // 💨 Smoke puffs
+        for(let i=0;i<3;i++){
+            const smoke = document.createElement("div");
+            smoke.className = "smoke";
+            smoke.style.left = (rect.left + rect.width/2 + Math.random()*20-10) + "px";
+            smoke.style.top = (rect.top + rect.height/2 + Math.random()*20-10) + "px";
+            document.body.appendChild(smoke);
+            setTimeout(()=>smoke.remove(),1000);
+        }
+
+        // 😱 Tiny scream bubbles
+        const scream = document.createElement("div");
+        scream.className = "scream";
+        scream.innerText = "Haaa!";
+        scream.style.left = (rect.left + rect.width/2) + "px";
+        scream.style.top = (rect.top) + "px";
+        document.body.appendChild(scream);
+        setTimeout(()=>scream.remove(),1000);
+
+        // 💬 Quotes from stars
+        const quotes = [
+    "Of all the paths in life… mine led to you ✨",
+    "My heart feels at home when it's with you 💖",
+    "You are my favorite thought before I sleep 🌙",
+    "If love had a face, it would look like you",
+    "Every star tonight reminds me of your light ⭐",
+    "Loving you feels like destiny, not chance",
+    "You are my calm in every storm",
+    "The universe was kind when it gave me you",
+    "My heart chose you before I even knew why",
+    "Forever doesn’t feel long enough with you ❤️"
+        ];
+        const quote = document.createElement("div");
+        quote.className = "quote";
+        quote.innerText = quotes[Math.floor(Math.random()*quotes.length)];
+        quote.style.left = (rect.left + rect.width/2) + "px";
+        quote.style.top = (rect.top + rect.height/2) + "px";
+        document.body.appendChild(quote);
+        setTimeout(()=>quote.remove(),2000);
     }
 });
 
@@ -350,9 +337,12 @@ yesBtn.addEventListener("click", () => {
     questionText.style.display = "none";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
+
+    // ⏱ Start song from 40 seconds
     bgMusic.currentTime = 40;
     bgMusic.play();
 
+    // 💖 Heart explosion from YES button
     for (let i = 0; i < 90; i++) {
         const heart = document.createElement("div");
         heart.className = "heart";
@@ -369,4 +359,3 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
