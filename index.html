@@ -42,7 +42,7 @@
     .card {
         text-align: center;
         background: rgba(255,255,255,0.05);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(5px);
         padding: 50px 70px;
         border-radius: 30px;
         box-shadow: 0 0 40px rgba(120, 0, 0, 0.4);
@@ -165,8 +165,8 @@
 <div class="card">
     <h1 id="questionText">Will you be Valentine Bhebhi?</h1>
     <div class="buttons" id="buttonArea">
-        <button id="yesBtn"><span>YES ❤️</span></button>
-        <button id="noBtn">no…</button>
+        <button id="yesBtn"><span>DUhh ❤️</span></button>
+        <button id="noBtn">no🙈</button>
     </div>
    <div class="message" id="loveMsg">
         it’s always been you 🌙 <br><br>
@@ -252,7 +252,7 @@ yesBtn.addEventListener("click", () => {
     bgMusic.play();
 
     // 💖 Heart explosion from YES button
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 90; i++) {
         const heart = document.createElement("div");
         heart.className = "heart";
         heart.innerHTML = "❤";
@@ -268,3 +268,4 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
