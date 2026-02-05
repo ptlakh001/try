@@ -175,7 +175,8 @@
     </div>
 </div>
 
-<audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/10/25/audio_946b6f6d84.mp3" loop></audio>
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" src="Carla_Morrison_-_Disfruto_CeeNaija.com_.mp3" loop></audio>
 
 <script>
 const area = document.getElementById("buttonArea");
@@ -187,7 +188,7 @@ const questionText = document.getElementById("questionText");
 
 let yesScale = 1;
 
-// Stars
+// ⭐ Stars
 for (let i = 0; i < 120; i++) {
     const star = document.createElement("div");
     star.className = "star";
@@ -197,7 +198,7 @@ for (let i = 0; i < 120; i++) {
     document.body.appendChild(star);
 }
 
-// Floating dark hearts
+// ❤️ Floating hearts
 setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -208,7 +209,7 @@ setInterval(() => {
     setTimeout(() => heart.remove(), 7000);
 }, 400);
 
-// Shy NO + gentle YES growth
+// 🙈 Shy NO + gentle YES growth
 area.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
@@ -228,7 +229,7 @@ area.addEventListener("mousemove", (e) => {
     }
 });
 
-// Sparkle trail
+// ✨ Sparkle trail
 document.addEventListener("mousemove", (e) => {
     const s = document.createElement("div");
     s.className = "sparkle";
@@ -238,14 +239,30 @@ document.addEventListener("mousemove", (e) => {
     setTimeout(() => s.remove(), 1000);
 });
 
-// YES click moment
+// ❤️ YES click moment
 yesBtn.addEventListener("click", () => {
     document.body.classList.add("love-bg");
     loveMsg.style.display = "block";
-    questionText.style.display = "none"; // hide the question
+    questionText.style.display = "none";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
+
+    // ⏱ Start song from 40 seconds
+    bgMusic.currentTime = 40;
     bgMusic.play();
+
+    // 💖 Heart explosion from YES button
+    for (let i = 0; i < 50; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤";
+        heart.style.left = (window.innerWidth/2 + (Math.random()*200 - 100)) + "px";
+        heart.style.top = (window.innerHeight/2 + (Math.random()*200 - 100)) + "px";
+        heart.style.fontSize = (12 + Math.random()*18) + "px";
+        heart.style.animationDuration = (2 + Math.random()*2) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }
 });
 </script>
 
