@@ -34,6 +34,12 @@
         animation: twinkle 2s infinite alternate;
     }
 
+    /* 🌟 Brighter stars */
+    .bright-star {
+        box-shadow: 0 0 12px 4px rgba(255,255,255,0.9);
+        opacity: 1 !important;
+    }
+
     @keyframes twinkle {
         from { opacity: 0.2; }
         to { opacity: 1; }
@@ -157,6 +163,44 @@
     @keyframes fadeOut {
         to { transform: scale(2); opacity: 0; }
     }
+
+    /* 💬 Star message */
+    .star-message {
+        position: fixed;
+        color: white;
+        font-size: 16px;
+        max-width: 240px;
+        text-align: center;
+        line-height: 1.4;
+        text-shadow: 0 0 12px rgba(255,255,255,0.9);
+        animation: starMsgFade 6s forwards;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    @keyframes starMsgFade {
+        0% { opacity: 0; transform: translateY(10px); }
+        10% { opacity: 1; transform: translateY(0); }
+        80% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* ☄️ Shooting star */
+    .shooting-star {
+        position: fixed;
+        width: 2px;
+        height: 80px;
+        background: linear-gradient(-45deg, white, rgba(255,255,255,0));
+        opacity: 0.9;
+        transform: rotate(45deg);
+        animation: shoot 1s linear forwards;
+        z-index: 0;
+    }
+
+    @keyframes shoot {
+        from { transform: translate(0,0) rotate(45deg); opacity: 1; }
+        to { transform: translate(500px,500px) rotate(45deg); opacity: 0; }
+    }
 </style>
 </head>
 
@@ -170,12 +214,11 @@
     </div>
    <div class="message" id="loveMsg">
         it’s always been you 🌙 <br><br>
-        Thato Work <br><br>
+        THATO behbii <br><br>
         Then let the stars witness the beginning of our forever ✨❤️
     </div>
 </div>
 
-<!-- 🎵 Background Music -->
 <audio id="bgMusic" src="Carla_Morrison_-_Disfruto_CeeNaija.com_.mp3" loop></audio>
 
 <script>
@@ -195,8 +238,59 @@ for (let i = 0; i < 120; i++) {
     star.style.left = Math.random() * 100 + "vw";
     star.style.top = Math.random() * 100 + "vh";
     star.style.animationDuration = (1 + Math.random() * 2) + "s";
+    if (Math.random() > 0.75) star.classList.add("bright-star");
     document.body.appendChild(star);
 }
+
+// 💬 Romantic quotes
+const starQuotes = [
+    "Of all the paths in life… mine led to you ✨",
+    "My heart feels at home when it's with you 💖",
+    "You are my favorite thought before I sleep 🌙",
+    "If love had a face, it would look like you",
+    "Every star tonight reminds me of your light ⭐",
+    "Loving you feels like destiny, not chance",
+    "You are my calm in every storm",
+    "The universe was kind when it gave me you",
+    "My heart chose you before I even knew why",
+    "Forever doesn’t feel long enough with you ❤️"
+];
+
+function showStarMessage(x, y) {
+    const msg = document.createElement("div");
+    msg.className = "star-message";
+    msg.innerHTML = starQuotes[Math.floor(Math.random() * starQuotes.length)];
+    msg.style.left = (x - 120) + "px";
+    msg.style.top = (y - 40) + "px";
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 6000);
+}
+
+function checkStarTap(x, y) {
+    document.querySelectorAll('.star').forEach(star => {
+        const rect = star.getBoundingClientRect();
+        const sx = rect.left + rect.width / 2;
+        const sy = rect.top + rect.height / 2;
+        if (Math.hypot(sx - x, sy - y) < 25) showStarMessage(sx, sy);
+    });
+}
+
+document.addEventListener("click", e => checkStarTap(e.clientX, e.clientY));
+document.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    checkStarTap(t.clientX, t.clientY);
+});
+
+// ☄️ Shooting stars
+function createShootingStar() {
+    const s = document.createElement("div");
+    s.className = "shooting-star";
+    s.style.left = Math.random() * window.innerWidth * 0.6 + "px";
+    s.style.top = Math.random() * window.innerHeight * 0.3 + "px";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+}
+setInterval(() => { if (Math.random() > 0.6) createShootingStar(); }, 2500);
 
 // ❤️ Floating hearts
 setInterval(() => {
@@ -209,21 +303,15 @@ setInterval(() => {
     setTimeout(() => heart.remove(), 7000);
 }, 400);
 
-// 🙈 Shy NO + gentle YES growth
+// 🙈 Shy NO + growing YES
 area.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-        e.clientX - (rect.left + rect.width/2),
-        e.clientY - (rect.top + rect.height/2)
-    );
-
+    const distance = Math.hypot(e.clientX - (rect.left + rect.width/2), e.clientY - (rect.top + rect.height/2));
     if (distance < 120) {
         const maxX = area.clientWidth - rect.width;
         const maxY = area.clientHeight - rect.height;
-
         noBtn.style.left = Math.random() * maxX + "px";
         noBtn.style.top = Math.random() * maxY + "px";
-
         yesScale += 0.025;
         yesBtn.style.transform = `rotate(-45deg) scale(${yesScale})`;
     }
@@ -246,12 +334,9 @@ yesBtn.addEventListener("click", () => {
     questionText.style.display = "none";
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
-
-    // ⏱ Start song from 40 seconds
     bgMusic.currentTime = 40;
     bgMusic.play();
 
-    // 💖 Heart explosion from YES button
     for (let i = 0; i < 90; i++) {
         const heart = document.createElement("div");
         heart.className = "heart";
@@ -268,4 +353,3 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
