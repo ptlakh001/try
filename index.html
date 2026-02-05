@@ -26,12 +26,13 @@
 
     .star {
         position: fixed;
-        width: 2px;
-        height: 2px;
+        width: 3px;
+        height: 3px;
         background: white;
         border-radius: 50%;
         opacity: 0.9;
         animation: twinkle 2s infinite alternate;
+        cursor: pointer;
     }
 
     @keyframes twinkle {
@@ -158,22 +159,18 @@
         to { transform: scale(2); opacity: 0; }
     }
 
+    /* Shooting quote */
     .quote {
         position: fixed;
         font-size: 16px;
         color: #ffb3b3;
         font-weight: 500;
-        opacity: 0;
-        animation: floatQuote 2s forwards;
+        opacity: 1;
         z-index: 4;
         pointer-events: none;
     }
 
-    @keyframes floatQuote {
-        0% { opacity: 1; transform: translateY(0px) scale(1); }
-        100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
-    }
-
+    /* NO dramatic effects */
     .smoke {
         position: fixed;
         width: 10px;
@@ -244,6 +241,43 @@ for (let i = 0; i < 120; i++) {
     star.style.top = Math.random() * 100 + "vh";
     star.style.animationDuration = (1 + Math.random() * 2) + "s";
     document.body.appendChild(star);
+
+    // 🌠 Shooting quote on click
+    star.addEventListener("click", (e) => {
+        const quotes = [
+            "Pyaar toh sab karte hain, par ek jaisa sirf ek hi baar hota hai 💖",
+            "Jab tum saath ho, har dard bhi khubsurat lagta hai ✨",
+            "Zindagi ke har mod par, bas tumhara intezaar kiya hai 🌙",
+            "Main haar ke bhi jeet gaya hoon… kyunki tu mere saath hai ❤️",
+            "Jo rishta lafzon se na banta ho, woh aankhon se ban jaata hai 💫",
+            "I burn for you 🔥",
+            "You are the bane of my existence and the object of all my desires 💌",
+            "To meet your best friend in the most beautiful of women is something entirely apart 💕",
+            "If I were truly courting you, I would not need flowers, only five minutes alone with you 🌹",
+            "I have loved, I have lost, but I have earned the right to do whatever I please 💖"
+        ];
+        const quote = document.createElement("div");
+        quote.className = "quote";
+        quote.innerText = quotes[Math.floor(Math.random()*quotes.length)];
+        document.body.appendChild(quote);
+
+        let startX = e.clientX;
+        let startY = e.clientY;
+        let angle = Math.random() * Math.PI/3 - Math.PI/6; // diagonal random
+        let distance = 0;
+        const speed = 3 + Math.random()*2; // px per frame
+        const interval = setInterval(()=>{
+            distance += speed;
+            quote.style.left = startX + distance * Math.cos(angle) + "px";
+            quote.style.top = startY - distance * Math.sin(angle) + "px";
+            quote.style.opacity = 1 - distance/200;
+            quote.style.transform = `scale(${1 - distance/600})`;
+            if(distance>200){
+                clearInterval(interval);
+                quote.remove();
+            }
+        },16);
+    });
 }
 
 // ❤️ Floating hearts
@@ -265,7 +299,7 @@ area.addEventListener("mousemove", (e) => {
         e.clientY - (rect.top + rect.height/2)
     );
 
-    if (distance < 160) { // react sooner
+    if (distance < 160) {
         const maxX = area.clientWidth - rect.width;
         const maxY = area.clientHeight - rect.height;
 
@@ -296,27 +330,6 @@ area.addEventListener("mousemove", (e) => {
         scream.style.top = (rect.top) + "px";
         document.body.appendChild(scream);
         setTimeout(()=>scream.remove(),1000);
-
-        // 💬 Quotes from stars
-        const quotes = [
-    "Of all the paths in life… mine led to you ✨",
-    "My heart feels at home when it's with you 💖",
-    "You are my favorite thought before I sleep 🌙",
-    "If love had a face, it would look like you",
-    "Every star tonight reminds me of your light ⭐",
-    "Loving you feels like destiny, not chance",
-    "You are my calm in every storm",
-    "The universe was kind when it gave me you",
-    "My heart chose you before I even knew why",
-    "Forever doesn’t feel long enough with you ❤️"
-        ];
-        const quote = document.createElement("div");
-        quote.className = "quote";
-        quote.innerText = quotes[Math.floor(Math.random()*quotes.length)];
-        quote.style.left = (rect.left + rect.width/2) + "px";
-        quote.style.top = (rect.top + rect.height/2) + "px";
-        document.body.appendChild(quote);
-        setTimeout(()=>quote.remove(),2000);
     }
 });
 
