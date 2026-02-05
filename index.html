@@ -255,16 +255,32 @@ const starQuotes = [
     "My heart chose you before I even knew why",
     "Forever doesn’t feel long enough with you ❤️"
 ];
+let activeStarMsg = null; // keeps track of current visible quote
 
 function showStarMessage(x, y) {
+    // Remove any existing message first
+    if (activeStarMsg) {
+        activeStarMsg.remove();
+        activeStarMsg = null;
+    }
+
     const msg = document.createElement("div");
     msg.className = "star-message";
     msg.innerHTML = starQuotes[Math.floor(Math.random() * starQuotes.length)];
     msg.style.left = (x - 120) + "px";
     msg.style.top = (y - 40) + "px";
+
     document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 6000);
+    activeStarMsg = msg;
+
+    setTimeout(() => {
+        if (msg === activeStarMsg) {
+            msg.remove();
+            activeStarMsg = null;
+        }
+    }, 6000);
 }
+
 
 function checkStarTap(x, y) {
     document.querySelectorAll('.star').forEach(star => {
@@ -353,3 +369,4 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
+
